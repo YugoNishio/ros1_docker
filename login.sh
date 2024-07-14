@@ -1,3 +1,6 @@
 #!/bin/bash
+DOCKER_CONTAINER="harvesting_robot"
 
-eval "docker container exec -it my-noetic bash"
+eval docker start "$DOCKER_CONTAINER"
+eval docker attach "$DOCKER_CONTAINER"
+#eval "docker container exec -it "$DOCKER_CONTAINER" bash"
