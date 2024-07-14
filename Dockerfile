@@ -19,8 +19,7 @@ RUN apt-get install -y tzdata
 RUN apt-get update && apt-get install -y vim git lsb-release sudo gnupg tmux curl
 
 # install terminator
-RUN apt-get install terminator -y
-
+RUN apt-get install -y terminator
 
 RUN apt-get install -y ros-noetic-rqt-* 
 RUN apt-get install -y python3-catkin-tools
@@ -38,3 +37,16 @@ COPY config/.vimrc /home/.vimrc
 
 # clean workspace
 RUN rm -rf git_clone.sh
+
+# install universal_robot package
+RUN cd /home/catkin_ws/src && git clone -b noetic-devel https://github.com/ros-industrial/universal_robot.git
+RUN rosdep update
+RUN cd /home/catkin_ws/
+RUN rosdep install -y --rosdistro noetic --ignore-src --from-paths /home/catkin_ws/src
+
+# build catkin_ws
+RUN cd /home/catkin_ws && . /opt/ros/noetic/setup.sh && catkin_make
+RUN source /home/catkin_ws/devel/setup.bash
+
+# resolve GUI rendering problems
+RUN export LIBGL_ALWAYS_SOFTWARE=1
