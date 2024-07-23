@@ -23,6 +23,13 @@ RUN apt-get install -y terminator
 
 RUN apt-get install -y ros-noetic-rqt-* 
 RUN apt-get install -y python3-catkin-tools
+RUN apt-get install -y ros-noetic-ros-control ros-noetic-ros-controllers
+RUN apt-get install -y ros-noetic-rviz-visual-tools
+RUN apt-get install -y ros-noetic-moveit-visual-tools
+RUN apt-get install -y ros-noetic-moveit ros-noetic-moveit-planners-ompl
+RUN apt-get install -y ros-noetic-control*
+RUN apt-get install -y ros-noetic-rosbridge-suite
+RUN apt-get install -y ros-noetic-openni-launch
 
 # set catkin workspace
 COPY config/git_clone.sh /home/git_clone.sh
@@ -43,6 +50,13 @@ RUN cd /home/catkin_ws/src && git clone -b noetic-devel https://github.com/ros-i
 RUN rosdep update
 RUN cd /home/catkin_ws/
 RUN rosdep install -y --rosdistro noetic --ignore-src --from-paths /home/catkin_ws/src
+
+# install ur5 package
+RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/ur5-joint-position-control.git
+RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/ur5-tcp-position-control.git
+RUN cd /home/catkin_ws/src && git clone https://github.com/filesmuggler/robotiq.git
+RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/common-sensors
+
 
 # build catkin_ws
 RUN cd /home/catkin_ws && . /opt/ros/noetic/setup.sh && catkin_make
