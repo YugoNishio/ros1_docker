@@ -24,12 +24,14 @@ RUN apt-get install -y terminator
 RUN apt-get install -y ros-noetic-rqt-* 
 RUN apt-get install -y python3-catkin-tools
 RUN apt-get install -y ros-noetic-ros-control ros-noetic-ros-controllers
+RUN apt-get install -y ros-noetic-rviz
 RUN apt-get install -y ros-noetic-rviz-visual-tools
 RUN apt-get install -y ros-noetic-moveit-visual-tools
 RUN apt-get install -y ros-noetic-moveit ros-noetic-moveit-planners-ompl
 RUN apt-get install -y ros-noetic-control*
 RUN apt-get install -y ros-noetic-rosbridge-suite
 RUN apt-get install -y ros-noetic-openni-launch
+RUN apt-get install -y libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
 
 # set catkin workspace
 COPY config/git_clone.sh /home/git_clone.sh
@@ -51,16 +53,25 @@ RUN rosdep update
 RUN cd /home/catkin_ws/
 RUN rosdep install -y --rosdistro noetic --ignore-src --from-paths /home/catkin_ws/src
 
+# remove opencv4
+RUN rm -r /usr/lib/x86_64-linux-gnu/cmake/opencv4/
+
+# install opencv3
+RUN apt-get install -y wget
+RUN cd /home/catkin_ws/src && wget https://github.com/opencv/opencv/archive/refs/tags/3.4.16.tar.gz
+RUN cd /home/catkin_ws/src && tar -zxvf 3.4.16.tar.gz
+RUN cd /home/catkin_ws/src/opencv-3.4.16 && mkdir build
+RUN cd /home/catkin_ws/src/opencv-3.4.16/build && cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local .. && \
+rm ../../3.4.16.tar.gz && make -j9 && sudo make install
+
 # install ur5 package
 RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/ur5-joint-position-control.git
 RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/ur5-tcp-position-control.git
 RUN cd /home/catkin_ws/src && git clone https://github.com/filesmuggler/robotiq.git
 RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/common-sensors
-
+RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/opencv_services.git
+RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/ur5_pick_and_place_opencv.git
 
 # build catkin_ws
 RUN cd /home/catkin_ws && . /opt/ros/noetic/setup.sh && catkin_make
 RUN source /home/catkin_ws/devel/setup.bash
-
-# resolve GUI rendering problems
-RUN export LIBGL_ALWAYS_SOFTWARE=1
