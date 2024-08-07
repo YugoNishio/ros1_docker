@@ -32,6 +32,8 @@ RUN apt-get install -y ros-noetic-control*
 RUN apt-get install -y ros-noetic-rosbridge-suite
 RUN apt-get install -y ros-noetic-openni-launch
 RUN apt-get install -y libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
+# install smach
+RUN apt-get install -y ros-noetic-smach-ros ros-noetic-smach-viewer
 
 # set catkin workspace
 COPY config/git_clone.sh /home/git_clone.sh
@@ -66,7 +68,7 @@ rm ../../3.4.16.tar.gz && make -j9 && sudo make install
 
 # install ur5 package
 RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/ur5-joint-position-control.git
-RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/ur5-tcp-position-control.git
+#RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/ur5-tcp-position-control.git
 RUN cd /home/catkin_ws/src && git clone https://github.com/filesmuggler/robotiq.git
 RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/common-sensors
 RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/opencv_services.git
