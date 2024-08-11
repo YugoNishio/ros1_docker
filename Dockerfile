@@ -50,10 +50,11 @@ COPY config/.vimrc /home/.vimrc
 RUN rm -rf git_clone.sh
 
 # install universal_robot package
-RUN cd /home/catkin_ws/src && git clone -b noetic-devel https://github.com/ros-industrial/universal_robot.git
+RUN cd /home/catkin_ws/src && git clone https://github.com/rt-net/crane_x7_ros.git
+RUN cd /home/catkin_ws/src && git clone https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
+RUN cd /home/catkin_ws/src && git clone https://github.com/rt-net/crane_x7_description.git
 RUN rosdep update
-RUN cd /home/catkin_ws/
-RUN rosdep install -y --rosdistro noetic --ignore-src --from-paths /home/catkin_ws/src
+RUN cd /home/catkin_ws/src && rosdep install -r -y --from-paths . --ignore-src
 
 # remove opencv4
 RUN rm -r /usr/lib/x86_64-linux-gnu/cmake/opencv4/
@@ -66,13 +67,19 @@ RUN cd /home/catkin_ws/src/opencv-3.4.16 && mkdir build
 RUN cd /home/catkin_ws/src/opencv-3.4.16/build && cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local .. && \
 rm ../../3.4.16.tar.gz && make -j9 && sudo make install
 
-# install ur5 package
-RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/ur5-joint-position-control.git
-#RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/ur5-tcp-position-control.git
-RUN cd /home/catkin_ws/src && git clone https://github.com/filesmuggler/robotiq.git
+#install realsense
+#RUN apt-get install -y software-properties-common
+RUN mkdir -p /etc/apt/keyrings
+RUN curl -sSf https://librealsense.intel.com/Debian/librealsense.pgp | sudo tee /etc/apt/keyrings/librealsense.pgp > /dev/null
+RUN echo "deb [signed-by=/etc/apt/keyrings/librealsense.pgp] https://librealsense.intel.com/Debian/apt-repo `lsb_release -cs` main" | \
+sudo tee /etc/apt/sources.list.d/librealsense.list
+RUN apt update -y && apt-get install -y librealsense2-dkms librealsense2-utils
+RUN apt-get install -y librealsense2-dev librealsense2-dbg
+RUN apt-get install -y ros-noetic-ddynamic-reconfigure
+RUN cd /home/catkin_ws/src && git clone https://github.com/IntelRealSense/realsense-ros.git
+RUN cd /home/catkin_ws/src/realsense-ros/ && git checkout `git tag | sort -V | grep -P "^2.\d+\.\d+" | tail -1`
+
 RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/common-sensors
-RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/opencv_services.git
-RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/ur5_pick_and_place_opencv.git
 
 # build catkin_ws
 RUN cd /home/catkin_ws && . /opt/ros/noetic/setup.sh && catkin_make

@@ -1,5 +1,5 @@
 #!/bin/bash
-DOCKER_CONTAINER="harvesting_robot"
+DOCKER_CONTAINER="crane_x7_robot"
 
 eval xhost local:root
 eval docker start "$DOCKER_CONTAINER"
