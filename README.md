@@ -2,17 +2,17 @@
 
 clone  
 ```
-~/$ git clone -b humble https://github.com/YugoNishio/ros1_docker.git
+git clone -b humble https://github.com/YugoNishio/ros1_docker.git
 ```
 step1.  
 ```
-~/ros1_docker$ ./build.sh
+./build.sh
 ```
 step2.  
 ```
-~/ros1_docker$ ./run.sh
+./run.sh
 ```
 再びコンテナを起動する場合   
 ```
-~/ros1_docker$ ./login.sh
+./login.sh
 ```
