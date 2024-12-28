@@ -15,7 +15,7 @@ then
     chmod a+r $XAUTH
 fi
 
-docker run \
+docker run -v $PWD/docker_share:/home/hosts_files --privileged \
     -it \
     --env="DISPLAY=$DISPLAY" \
     --env="QT_X11_NO_MITSHM=1" \
