@@ -15,15 +15,15 @@ then
     chmod a+r $XAUTH
 fi
 
-docker run -v $PWD/docker_share:/home/hosts_files --privileged \
+docker run \
     -it \
     --env="DISPLAY=$DISPLAY" \
     --env="QT_X11_NO_MITSHM=1" \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --env="XAUTHORITY=$XAUTH" \
     --volume="$XAUTH:$XAUTH" \
-    --name="harvesting_robot" \
-    harvesting_robot \
+    --name="harvesting_robot_humble" \
+    harvesting_robot_humble:latest \
     bash
 
 echo "done"
