@@ -100,12 +100,11 @@ fi
 #    . /etc/bash_completion
 #fi
 
-source /opt/ros/noetic/setup.bash
-source ~/catkin_ws/devel/setup.bash
+source /opt/ros/humble/setup.bash
 export ROS_MASTER_URI=http://localhost:11311
 export ROS_HOSTNAME=localhost
 
-export ROS_WORKSPACE=${HOME}/catkin_ws
+export ROS_WORKSPACE=${HOME}/ros2_ws
 
 # function ros_make() {
 #     dir=$PWD;
@@ -114,5 +113,9 @@ export ROS_WORKSPACE=${HOME}/catkin_ws
 #     . install/local_setup.bash;
 #     cd $dir;
 # }
-	
-export TURTLEBOT3_MODEL=burger    
+
+# setup git branch view
+source /usr/local/etc/bash_completion.d/git-prompt.sh
+source /usr/local/etc/bash_completion.d/git-completion.bash
+GIT_PS1_SHOWDIRTYSTATE=true
+export PS1='\[\033[01;32m\]\u@\h\[\033[01;34m\] \w\[\033[01;31m\]$(__git_ps1 "[%s]")\[\033[00m\]\$\[\033[00m\] '

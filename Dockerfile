@@ -13,6 +13,13 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 SHELL ["/bin/bash", "-c"]
 
+# add_check_git _branch
+RUN cd /usr/local/etc && mkdir bash_completion.d
+RUN cd /usr/local/etc/bash_completion.d \
+&& curl -O https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh \
+&& curl -O https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash \
+&& chmod a+x git*.*
+
 # install vim
 RUN apt-get update -qq
 RUN apt-get install -y tzdata
@@ -39,6 +46,8 @@ RUN apt-get install -y ros-humble-moveit ros-humble-moveit-planners-ompl
 RUN mkdir -p ~/ros2_ws/src
 WORKDIR /home/ros2_ws/
 RUN /bin/bash -c '. /opt/ros/humble/setup.bash; colcon build'
+COPY config/.bashrc /home/.bashrc
+COPY config/.vimrc /home/.vimrc
 
 # install universal_robot package
 RUN cd /home/ros2_ws/src && git clone -b humble https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver.git
@@ -50,10 +59,7 @@ RUN cd /home/ros2_ws/src && git clone -b humble https://github.com/UniversalRobo
 
 RUN cd /home/ros2_ws && source /opt/ros/humble/setup.bash && MAKEFLAGS="-j12 -l10" colcon build --executor sequential
 RUN source /home/ros2_ws/install/setup.bash
-RUN echo "source /home/ros2_ws/install/setup.bash" >> ~/.bashrc
-
-COPY config/.bashrc /home/.bashrc
-COPY config/.vimrc /home/.vimrc
+RUN echo "source /home/ros2_ws/install/setup.bash" >> ~/.bashrc && source ~/.bashrc
 
 # clean workspace
 RUN rm -rf git_clone.sh
