@@ -36,6 +36,9 @@ RUN apt-get install -y ros-noetic-control*
 RUN apt-get install -y ros-noetic-rosbridge-suite
 RUN apt-get install -y ros-noetic-openni-launch
 RUN apt-get install -y libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
+RUN apt-get install -y ros-noetic-rosparam-shortcuts
+RUN apt-get install -y python-is-python3
+
 # install smach
 RUN apt-get install -y ros-noetic-smach-ros ros-noetic-smach-viewer
 # install eog
@@ -86,8 +89,12 @@ RUN cd /home/catkin_ws/src && git clone https://github.com/filesmuggler/robotiq.
 RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/common-sensors
 RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/opencv_services.git
 RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/ur5_pick_and_place_opencv.git
+RUN cd /home/catkin_ws/src && git clone https://github.com/Unity-Technologies/ROS-TCP-Endpoint
+RUN cd /home/catkin_ws/src && git clone -b noetic-devel https://github.com/moveit/moveit.git
+RUN cd /home/catkin_ws/src/moveit/moveit_ros && cp -r moveit_servo/ ~/catkin_ws/src/
+RUN cd /home/catkin_ws/src && rm -r moveit
 
 # build catkin_ws
-RUN cd /home/catkin_ws && . /opt/ros/noetic/setup.sh && catkin_make
+RUN cd /home/catkin_ws && . /opt/ros/noetic/setup.sh && catkin_make -j12
 #RUN cd /home/catkin_ws && . /opt/ros/noetic/setup.sh && catkin build
 RUN source /home/catkin_ws/devel/setup.bash
