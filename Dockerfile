@@ -90,6 +90,8 @@ RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/common-sensors
 RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/opencv_services.git
 RUN cd /home/catkin_ws/src && git clone https://github.com/dairal/ur5_pick_and_place_opencv.git
 RUN cd /home/catkin_ws/src && git clone https://github.com/Unity-Technologies/ROS-TCP-Endpoint
+RUN cd /home/catkin_ws/src && git clone https://github.com/open-rdc/harvesting_endeffector.git
+# setup to moveit servo
 RUN cd /home/catkin_ws/src && git clone -b noetic-devel https://github.com/moveit/moveit.git
 RUN cd /home/catkin_ws/src/moveit/moveit_ros && cp -r moveit_servo/ ~/catkin_ws/src/
 RUN cd /home/catkin_ws/src && rm -r moveit
