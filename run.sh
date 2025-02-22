@@ -22,8 +22,8 @@ docker run -v $PWD/docker_share:/home/hosts_files --privileged \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --env="XAUTHORITY=$XAUTH" \
     --volume="$XAUTH:$XAUTH" \
-    --name="harvesting_robot" \
-    harvesting_robot \
+    --name="harvesting_robot_play_ground" \
+    harvesting_robot_play_ground \
     bash
 
 echo "done"

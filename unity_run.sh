@@ -24,8 +24,8 @@ docker run -p 6080:80 -p 10000:10000 -p 5005:5005 \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --env="XAUTHORITY=$XAUTH" \
     --volume="$XAUTH:$XAUTH" \
-    --name="harvesting_robot" \
-    harvesting_robot \
+    --name="harvesting_robot_play_ground" \
+    harvesting_robot_play_ground \
     bash
 
 echo "done"
